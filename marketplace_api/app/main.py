@@ -1,4 +1,7 @@
 from fastapi import FastAPI
+from sqlalchemy import text
+
+from app.core.database import engine
 
 app = FastAPI(
     title="Marketplace API",
@@ -10,4 +13,13 @@ app = FastAPI(
 def read_root():
     return {
         "message": "Marketplace API is running"
+    }
+
+@app.get("/health/database")
+def database_health():
+    with engine.connect() as connection:
+        result = connection.execute(text("SELECT 1"))
+
+    return {
+        "database": result.scalar()
     }
