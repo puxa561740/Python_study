@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from sqlalchemy import text
 
+from app.api.v1.auth import router as auth_router
 from app.core.database import engine
 
 app = FastAPI(
@@ -23,3 +24,8 @@ def database_health():
     return {
         "database": result.scalar()
     }
+
+app.include_router(
+    auth_router,
+    prefix="/api/v1",
+)
